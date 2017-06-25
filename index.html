@@ -6,42 +6,112 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.2/css/bulma.min.css">
+  <script src="https://www.celljs.org/cell.js"></script>
   <title>Twitchers</title>
 </head>
 <body>
-  <section class="hero is-primary">
-    <div class="hero-body">
-      <div class="container">
-        <header>
-          <h1 class="title">
-            <strong>Twitcher</strong>
-          </h1>
-          <h2 class="subtitle">
-
-          </h2>
-        </header>
+    <section class="hero is-primary">
+      <div class="hero-body">
+        <div class="container">
+          <header>
+            <h1 class="title">
+              <strong>Twitcher</strong>
+            </h1>
+            <h2 class="subtitle">
+              A list of my favorite Twitch channels.
+            </h2>
+          </header>
+        </div>
       </div>
-    </div>
-  </section>
-  <section class="section is-medium">
-    <div class="container">
+    </section>
+    <section class="section is-medium">
+      <div class="container">
+        <div class="tabs is-centered is-boxed">
+          <ul>
+            <li class="is-active">
+              <a>
+                <span class="icon is-small"><i class="fa fa-image"></i></span>
+                <span>All</span>
+              </a>
+            </li>
+            <li>
+              <a>
+                <span class="icon is-small"><i class="fa fa-music"></i></span>
+                <span>Online</span>
+              </a>
+            </li>
+            <li>
+              <a>
+                <span class="icon is-small"><i class="fa fa-film"></i></span>
+                <span>Offline</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div id="streamer-list" class="container">
+        <div class="card">
+          <div class="card-content">
+            <div class="media">
+              <div class="media-left">
+                <figure class="image is-48x48">
+                  <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/raynday-profile_image-d588caa898a550b9-300x300.jpeg" alt="Image">
+                </figure>
+              </div>
+              <div class="media-content">
+                <p class="title is-4">Raynday</p>
+                <p class="subtitle is-6">@raynday <span class="icon is-small" style="color:green"><i class="fa fa-circle"></i></span></p>
+              </div>
+            </div>
 
-    </div>
-  </section>
-  <footer class="footer">
-  <div class="container">
-    <div class="content has-text-centered">
-      <p>
-        <strong>Twitcher</strong> by <em>John Paul Ada</em>.
-        A <a href="http://freecodecamp.com">FreeCodeCamp</a> project.
-      </p>
-      <p>
-        <a class="icon" href="https://github.com/jgthms/bulma">
-          <i class="fa fa-github"></i>
-        </a>
-      </p>
-    </div>
-  </div>
-</footer>
+            <div class="content">
+              <p>eSports Commentator, Streamer, Youtuber and Entertainer for SMITE and PALADINS.</p>
+              <p><strong>Streaming: Top 5 Legendary Cards</strong></p>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-content">
+            <div class="media">
+              <div class="media-left">
+                <figure class="image is-48x48">
+                  <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/raynday-profile_image-d588caa898a550b9-300x300.jpeg" alt="raynday">
+                </figure>
+              </div>
+              <div class="media-content">
+                <p class="title is-4">Raynday</p>
+                <p class="subtitle is-6">@raynday <span class="icon is-small"><i class="fa fa-circle-o"></i></span></p>
+              </div>
+            </div>
+
+            <div class="content">
+              eSports Commentator, Streamer, Youtuber and Entertainer for SMITE and PALADINS.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="footer">
+      <div class="container">
+        <div class="content has-text-centered">
+          <p>
+            <strong>Twitcher</strong> by <em>John Paul Ada</em>.
+            A <a href="http://freecodecamp.com">FreeCodeCamp</a> project.
+          </p>
+          <p>
+            <a class="button" href="https://github.com/johnpaulada/twitcher">
+              <span class="icon">
+                <i class="fa fa-github"></i>
+              </span>
+              <span>GitHub</span>
+            </a>
+            <a class="button" href="https://codepen.io/jepe-ada/pen/xrLdQy">
+              <span>Codepen</span>
+            </a>
+          </p>
+        </div>
+      </div>
+    </footer>
+    <script src="./main.js"></script>
 </body>
 </html>
