@@ -1,7 +1,7 @@
-const STREAMER_LIST = ['freecodecamp', 'raynday']
-const ALL = Symbol()
-const ONLINE = Symbol()
-const OFFLINE = Symbol()
+const STREAMER_LIST = ['freecodecamp', 'raynday', 'jepedesu']
+const ALL = 'ALL'
+const ONLINE = 'ONLINE'
+const OFFLINE = 'OFFLINE'
 const TABS = {ALL: 'All', ONLINE: 'Online', OFFLINE: 'Offline'}
 const USERS_ENDPOINT = 'https://wind-bow.glitch.me/twitch-api/users'
 const STREAMS_ENDPOINT = 'https://wind-bow.glitch.me/twitch-api/streams'
@@ -18,7 +18,7 @@ const StatusIcon = ({active}) => ({
     class: 'icon is-small',
     style: active ? 'color: green' : '',
     $components: [
-        {$type: 'i', class: `fa fa-circle ${(active ? '' : '-o')}`}
+        {$type: 'i', class: `fa fa-circle${(active ? '' : '-o')}`}
     ]
 })
 
@@ -87,24 +87,28 @@ const StreamerCard = ({name, username, active, src, alt, bio, streaming}) => ({
 
 const StreamerList = function(list) {
     return {
-        class: 'container',
-        _list: [],
         $init: function() {
-            this._list = list
+          console.log(list);
         },
-        $update: function() {
+        class: 'container',
+        $init: function() {
             this.$components = this._list.map(card => StreamerCard(card))
         }
     }
 }
 
-const Tab = ({name, active}) => ({
-  $type: 'li',
-  class: active ? 'is-active' : '',
-  $components: [
-    {$type: 'a', $text: name}
-  ]
-})
+const Tab = function({name, active}) {
+  return {
+    $type: 'li',
+    class: active ? 'is-active' : '',
+    onclick: function() {
+      this._currentFilter = name.toUpperCase()
+    },
+    $components: [
+      {$type: 'a', $text: name}
+    ]
+  }
+}
 
 const TabList = function(tabs) {
   return {
@@ -116,16 +120,23 @@ const TabList = function(tabs) {
     $update: function() {
       this.$components = [
         {class: 'tabs is-centered is-boxed', $components: [
-          {$type: 'ul', $components: this._filters.map(filter => Tab(filter))}
+          {$type: 'ul', $components: Object.entries(this._filters).map(filter => Tab({name: filter[1], active: this._currentFilter === filter[0]}))}
         ]}
       ]
     }
   }
 }
 
-// const streamerList = [
-//     {src: 'https://static-cdn.jtvnw.net/jtv_user_pictures/raynday-profile_image-d588caa898a550b9-300x300.jpeg', alt: 'raynday', name: "Raynday", username: '@raynday', active: true, bio: 'eSports Commentator, Streamer, Youtuber and Entertainer for SMITE and PALADINS.', streaming: null}
-// ]
+const zip = (a, b) => {
+    let zipped = []
+    a.forEach((v, i) => zipped.push(Object.assign({}, v, b[i])))
+
+    return zipped
+}
+
+const getCardData = data => {
+  return {src: data.logo, alt: data.name, name: data.display_name, username: `@${data.name}`, active: !!data.stream, bio: data.bio, streaming: !!data.stream ? 'Stream?' : null}
+}
 
 const App = function(list) {
   return {
@@ -136,11 +147,20 @@ const App = function(list) {
     _currentFilter: ALL,
     $init: function() {
       Promise.all(ENDPOINTS.map(endpoint => Promise.all(list.map(user => fetch(`${endpoint}/${user}`).then(res => res.json()))))).then(values => {
-        console.log(values)
+        this._list = zip(values[0], values[1]).map(getCardData)
+        this.$update()
       })
     },
     $update: function() {
-      console.log(this._list);
+      this.$components = [TabList(TABS), StreamerList(this._list.filter(item => {
+        if (this._currentFilter === ONLINE && !item.streaming) {
+          return false
+        } else if (this._currentFilter === OFFLINE && item.streaming) {
+          return false
+        }
+
+        return true
+      }))]
     }
   }
 }
