@@ -1,3 +1,12 @@
+const STREAMER_LIST = ['freecodecamp', 'raynday']
+const ALL = Symbol()
+const ONLINE = Symbol()
+const OFFLINE = Symbol()
+const TABS = {ALL: 'All', ONLINE: 'Online', OFFLINE: 'Offline'}
+const USERS_ENDPOINT = 'https://wind-bow.glitch.me/twitch-api/users'
+const STREAMS_ENDPOINT = 'https://wind-bow.glitch.me/twitch-api/streams'
+const ENDPOINTS = [USERS_ENDPOINT, STREAMS_ENDPOINT]
+
 const StreamerName = ({name}) => ({
    $type: 'p',
    $text: name,
@@ -76,15 +85,9 @@ const StreamerCard = ({name, username, active, src, alt, bio, streaming}) => ({
     ]
 })
 
-const streamerList = [
-    {src: 'https://static-cdn.jtvnw.net/jtv_user_pictures/raynday-profile_image-d588caa898a550b9-300x300.jpeg', alt: 'raynday', name: "Raynday", username: '@raynday', active: true, bio: 'eSports Commentator, Streamer, Youtuber and Entertainer for SMITE and PALADINS.', streaming: null},
-    {src: 'https://static-cdn.jtvnw.net/jtv_user_pictures/raynday-profile_image-d588caa898a550b9-300x300.jpeg', alt: 'raynday', name: "Raynday", username: '@raynday', active: true, bio: 'eSports Commentator, Streamer, Youtuber and Entertainer for SMITE and PALADINS.', streaming: null}
-]
-
-const StreamerList = function(list){
+const StreamerList = function(list) {
     return {
-        $cell: true,
-        id: 'streamer-list',
+        class: 'container',
         _list: [],
         $init: function() {
             this._list = list
@@ -95,4 +98,56 @@ const StreamerList = function(list){
     }
 }
 
-var root = StreamerList(streamerList)
+const Tab = ({name, active}) => ({
+  $type: 'li',
+  class: active ? 'is-active' : '',
+  $components: [
+    {$type: 'a', $text: name}
+  ]
+})
+
+const TabList = function(tabs) {
+  return {
+    class: 'container',
+    _filters: [],
+    $init: function() {
+      this._filters = tabs
+    },
+    $update: function() {
+      this.$components = [
+        {class: 'tabs is-centered is-boxed', $components: [
+          {$type: 'ul', $components: this._filters.map(filter => Tab(filter))}
+        ]}
+      ]
+    }
+  }
+}
+
+// const streamerList = [
+//     {src: 'https://static-cdn.jtvnw.net/jtv_user_pictures/raynday-profile_image-d588caa898a550b9-300x300.jpeg', alt: 'raynday', name: "Raynday", username: '@raynday', active: true, bio: 'eSports Commentator, Streamer, Youtuber and Entertainer for SMITE and PALADINS.', streaming: null}
+// ]
+
+const App = function(list) {
+  return {
+    $cell: true,
+    id: 'app',
+    class: 'section is-medium',
+    _list: [],
+    _currentFilter: ALL,
+    $init: function() {
+      Promise.all(ENDPOINTS.map(endpoint => Promise.all(list.map(user => fetch(`${endpoint}/${user}`).then(res => res.json()))))).then(values => {
+        this._list = values[0].reduce((acc, value, i) => {
+          acc[i] = {...acc[i], ...value}
+          return acc
+        }, values[1])
+
+        this.$update()
+      })
+    },
+    $update: function() {
+      console.log(this._list);
+    }
+  }
+}
+
+var root = App(STREAMER_LIST)
