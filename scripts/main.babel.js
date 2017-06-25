@@ -136,12 +136,7 @@ const App = function(list) {
     _currentFilter: ALL,
     $init: function() {
       Promise.all(ENDPOINTS.map(endpoint => Promise.all(list.map(user => fetch(`${endpoint}/${user}`).then(res => res.json()))))).then(values => {
-        this._list = values[0].reduce((acc, value, i) => {
-          acc[i] = {...acc[i], ...value}
-          return acc
-        }, values[1])
-
-        this.$update()
+        console.log(values)
       })
     },
     $update: function() {

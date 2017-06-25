@@ -1,0 +1,14 @@
+{
+	"name": "twitcher",
+	"exportDir": "dist",
+	"minify": true,
+	"compile": true,
+	"exclusions": [
+		{
+			"path": "node_modules",
+			"action": "exclude",
+			"type": "dir"
+		}
+	],
+	"port": 53090
+}
