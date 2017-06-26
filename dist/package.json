@@ -1,0 +1,32 @@
+{
+  "name": "twitcher",
+  "version": "1.0.0",
+  "description": "A list of my favorite Twitch channels. Made for FreeCodeCamp.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "pingy dev",
+    "export": "pingy export"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/johnpaulada/twitcher.git"
+  },
+  "keywords": [
+    "freecodecamp",
+    "freecodecamp-project",
+    "twitch-api",
+    "twitch"
+  ],
+  "author": "John Paul Ada",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/johnpaulada/twitcher/issues"
+  },
+  "homepage": "https://github.com/johnpaulada/twitcher#readme",
+  "devDependencies": {
+    "@pingy/cli": "^0.6.11",
+    "babel-core": "^6.25.0",
+    "babel-preset-env": "^1.5.2"
+  }
+}

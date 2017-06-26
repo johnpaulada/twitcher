@@ -1,0 +1,46 @@
+[
+  {
+    "type": "::map::minify",
+    "inputSha": [
+      {
+        "file": "index.html",
+        "sha": "c39bc73de1cfbd40f62f752a5cf313c212aaa6a2"
+      }
+    ],
+    "outputSha": "c62d812d2762540622e6536d0f9b2d78b2fafce0",
+    "input": "index.html",
+    "output": [
+      "index.html"
+    ]
+  },
+  {
+    "type": "::map::minify",
+    "inputSha": [
+      {
+        "file": "styles/main.css",
+        "sha": "251b5b6e72ef49fe8ed8cb13be5775eee4278613"
+      }
+    ],
+    "outputSha": "8927ab5318a3fec1eacc65cba72e6a5815fef37a",
+    "input": "styles/main.css",
+    "output": [
+      "styles/main.css.map",
+      "styles/main.css"
+    ]
+  },
+  {
+    "type": "babel-core@6.25.0::map::minify",
+    "inputSha": [
+      {
+        "file": "scripts/main.babel.js",
+        "sha": "1d59bfaab83d4695253dd1b270bfde5f3ffa1a3b"
+      }
+    ],
+    "outputSha": "a87ace4e9172d7a55f21bcda156ed4c4b250431f",
+    "input": "scripts/main.babel.js",
+    "output": [
+      "scripts/main.js.map",
+      "scripts/main.js"
+    ]
+  }
+]
