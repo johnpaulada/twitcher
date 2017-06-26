@@ -1,8 +1,9 @@
-const STREAMER_LIST = ['freecodecamp', 'raynday', 'jepedesu']
+const STREAMER_LIST = ['freecodecamp', 'raynday', 'jepedesu', 'overwatchcontenders']
 const ALL = 'ALL'
 const ONLINE = 'ONLINE'
 const OFFLINE = 'OFFLINE'
 const TABS = {ALL: 'All', ONLINE: 'Online', OFFLINE: 'Offline'}
+const TAB_DECISIONS = { ALL: [true, true], ONLINE: [true, false], OFFLINE: [false, true] }
 const USERS_ENDPOINT = 'https://wind-bow.glitch.me/twitch-api/users'
 const STREAMS_ENDPOINT = 'https://wind-bow.glitch.me/twitch-api/streams'
 const ENDPOINTS = [USERS_ENDPOINT, STREAMS_ENDPOINT]
@@ -85,11 +86,8 @@ const StreamerCard = ({name, username, active, src, alt, bio, streaming}) => ({
     ]
 })
 
-const StreamerList = function(list) {
+const StreamerList = function() {
     return {
-        $init: function() {
-          console.log(list);
-        },
         class: 'container',
         $init: function() {
             this.$components = this._list.map(card => StreamerCard(card))
@@ -135,7 +133,7 @@ const zip = (a, b) => {
 }
 
 const getCardData = data => {
-  return {src: data.logo, alt: data.name, name: data.display_name, username: `@${data.name}`, active: !!data.stream, bio: data.bio, streaming: !!data.stream ? 'Stream?' : null}
+  return {src: data.logo, alt: data.name, name: data.display_name, username: `@${data.name}`, active: !!data.stream, bio: data.bio, streaming: !!data.stream ? data.stream.channel.status : null}
 }
 
 const App = function(list) {
@@ -143,24 +141,22 @@ const App = function(list) {
     $cell: true,
     id: 'app',
     class: 'section is-medium',
+    _fullList: [],
     _list: [],
+    _searchFilter: '',
     _currentFilter: ALL,
-    $init: function() {
+    _refresh: function() {
       Promise.all(ENDPOINTS.map(endpoint => Promise.all(list.map(user => fetch(`${endpoint}/${user}`).then(res => res.json()))))).then(values => {
-        this._list = zip(values[0], values[1]).map(getCardData)
+        this._fullList = zip(values[0], values[1]).map(getCardData)
         this.$update()
       })
     },
+    $init: function() {
+      this._refresh()
+    },
     $update: function() {
-      this.$components = [TabList(TABS), StreamerList(this._list.filter(item => {
-        if (this._currentFilter === ONLINE && !item.streaming) {
-          return false
-        } else if (this._currentFilter === OFFLINE && item.streaming) {
-          return false
-        }
-
-        return true
-      }))]
+      this._list = this._fullList.filter(v => v.alt.includes(this._searchFilter) && TAB_DECISIONS[this._currentFilter][(v.streaming === null) & 1])
+      this.$components = [TabList(TABS), StreamerList()]
     }
   }
 }
