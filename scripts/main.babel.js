@@ -129,6 +129,23 @@ const TabList = function(tabs) {
   }
 }
 
+const SearchBar = function() {
+  return {
+    $cell: true,
+    id: 'search-bar',
+    class: 'container field',
+    oninput: function(e) {
+      document.querySelector('#app')._searchFilter = e.target.value
+    },
+    $components: [{$type: 'p', class: 'control has-icons-left', $components: [
+      {$type: 'input', class: 'input', type: 'text', placeholder: 'Search'},
+      {$type: 'span', class: 'icon is-small is-left', $components: [
+        {$type: 'i', class: 'fa fa-search'}
+      ]}
+    ]}]
+  }
+}
+
 const zip = (a, b) => {
     let zipped = []
     a.forEach((v, i) => zipped.push(Object.assign({}, v, b[i])))
@@ -137,7 +154,6 @@ const zip = (a, b) => {
 }
 
 const getCardData = data => {
-  console.log(data);
   if (data.status === 404) {
     const name = data.message.replace('User "', '').replace('" was not found', '');
 
@@ -151,7 +167,6 @@ const App = function(list) {
   return {
     $cell: true,
     id: 'app',
-    class: 'section is-medium',
     _fullList: [],
     _list: [],
     _searchFilter: '',
@@ -166,10 +181,11 @@ const App = function(list) {
       this._refresh()
     },
     $update: function() {
-      this._list = this._fullList.filter(v => v.alt.includes(this._searchFilter) && TAB_DECISIONS[this._currentFilter][(v.streaming === null) & 1])
+      this._list = this._fullList.filter(v => v.alt.includes(this._searchFilter.toLowerCase()) && TAB_DECISIONS[this._currentFilter][(v.streaming === null) & 1])
       this.$components = [TabList(TABS), StreamerList()]
     }
   }
 }
 
+var search = SearchBar()
 var root = App(STREAMER_LIST)
