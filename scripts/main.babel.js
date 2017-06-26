@@ -1,12 +1,14 @@
-const STREAMER_LIST = ['freecodecamp', 'raynday', 'jepedesu', 'overwatchcontenders']
+const STREAMER_LIST = ['freecodecamp', 'raynday', 'jepedesu', 'overwatchcontenders', 'brunofin', "ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "storbeck", "habathcx", "RobotCaleb", "noobs2ninjas"]
 const ALL = 'ALL'
 const ONLINE = 'ONLINE'
 const OFFLINE = 'OFFLINE'
 const TABS = {ALL: 'All', ONLINE: 'Online', OFFLINE: 'Offline'}
 const TAB_DECISIONS = { ALL: [true, true], ONLINE: [true, false], OFFLINE: [false, true] }
+const TWITCH_URL = 'https://www.twitch.tv'
 const USERS_ENDPOINT = 'https://wind-bow.glitch.me/twitch-api/users'
 const STREAMS_ENDPOINT = 'https://wind-bow.glitch.me/twitch-api/streams'
 const ENDPOINTS = [USERS_ENDPOINT, STREAMS_ENDPOINT]
+const DEFAULT_AVATAR = 'https://s3-us-west-2.amazonaws.com/web-design-ext-production/p/Glitch_474x356.png'
 
 const StreamerName = ({name}) => ({
    $type: 'p',
@@ -78,6 +80,8 @@ const StreamerHeader = ({name, username, active, src, alt}) => ({
 
 const StreamerCard = ({name, username, active, src, alt, bio, streaming}) => ({
     class: 'card',
+    style: 'cursor: pointer',
+    onclick: () => {window.location.href = `${TWITCH_URL}/${username}`},
     $components: [
         {class: 'card-content', $components: [
             StreamerHeader({name, username, active, src, alt}),
@@ -133,7 +137,14 @@ const zip = (a, b) => {
 }
 
 const getCardData = data => {
-  return {src: data.logo, alt: data.name, name: data.display_name, username: `@${data.name}`, active: !!data.stream, bio: data.bio, streaming: !!data.stream ? data.stream.channel.status : null}
+  console.log(data);
+  if (data.status === 404) {
+    const name = data.message.replace('User "', '').replace('" was not found', '');
+
+    return {src: DEFAULT_AVATAR, alt: name, name, username: `@${name}`, active: false, bio: `${data.message}.`, streaming: null}
+  }
+
+  return {src: data.logo || DEFAULT_AVATAR, alt: data.name, name: data.display_name, username: `@${data.name}`, active: !!data.stream, bio: data.bio, streaming: !!data.stream ? data.stream.channel.status : null}
 }
 
 const App = function(list) {
