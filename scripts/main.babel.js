@@ -1,4 +1,4 @@
-const STREAMER_LIST = ['freecodecamp', 'raynday', 'jepedesu', 'overwatchcontenders', 'brunofin', "ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "storbeck", "habathcx", "RobotCaleb", "noobs2ninjas"]
+const STREAMER_LIST = ['freecodecamp', 'raynday', 'jepedesu', 'overwatchcontenders', 'brunofin', "ESL_SC2", "OgamingSC2", "cretetion", "storbeck", "habathcx", "RobotCaleb", "noobs2ninjas"]
 const ALL = 'ALL'
 const ONLINE = 'ONLINE'
 const OFFLINE = 'OFFLINE'
@@ -144,7 +144,7 @@ const getCardData = data => {
     return {src: DEFAULT_AVATAR, alt: name, name, username: `@${name}`, active: false, bio: `${data.message}.`, streaming: null}
   }
 
-  return {src: data.logo || DEFAULT_AVATAR, alt: data.name, name: data.display_name, username: `@${data.name}`, active: !!data.stream, bio: data.bio, streaming: !!data.stream ? data.stream.channel.status : null}
+  return {src: data.logo || DEFAULT_AVATAR, alt: data.name, name: data.display_name, username: `@${data.name}`, active: !!data.stream, bio: data.bio || "Twitch Streamer.", streaming: !!data.stream ? data.stream.channel.status : null}
 }
 
 const App = function(list) {
